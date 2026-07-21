@@ -1,2 +1,5 @@
-# project-rock
-Enterprise DevOps Platform showcasing Terraform, Ansible, GitHub Actions, Jenkins, Docker, Kubernetes, Helm, and AWS.
+# Project Rock
+
+## Enterprise DevOps Platform
+
+Production-inspired cloud-native platform built using Terraform, Ansible, Jenkins, GitHub Actions, Docker, Kubernetes, Helm and AWS.
