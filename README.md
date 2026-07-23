@@ -1,5 +1,51 @@
-# Project Rock
+# 🚀 Project Rock
 
-## Enterprise DevOps Platform
+> Enterprise DevOps Platform built with modern cloud-native technologies.
 
-Production-inspired cloud-native platform built using Terraform, Ansible, Jenkins, GitHub Actions, Docker, Kubernetes, Helm and AWS.
+---
+
+## 📖 Overview
+
+---
+
+## 🎯 Project Goals
+
+---
+
+## 🏗️ Architecture
+
+---
+
+## 🛠️ Technology Stack
+
+---
+
+## 📂 Repository Structure
+
+---
+
+## 🗺️ Roadmap
+
+---
+
+## 🚦 Current Status
+
+---
+
+## 🚀 Getting Started
+
+---
+
+## 📚 Documentation
+
+---
+
+## 🤝 Contributing
+
+---
+
+## 📄 License
+
+---
+
+## 👨‍💻 Author
