@@ -1,12 +1,21 @@
 from fastapi import APIRouter
 
-router = APIRouter(prefix="/health", tags=["Health"])
+from app.core.config import settings
+from app.schemas.system import HealthResponse
+
+router = APIRouter(tags=["Health"])
 
 
-@router.get("")
-def health():
-    return {
-        "status": "healthy",
-        "service": "project-rock-api",
-        "version": "0.1.0",
-    }
+@router.get(
+    "/health",
+    response_model=HealthResponse,
+    summary="Health Check",
+    description="Returns the current health status of the application.",
+)
+def health_check():
+    return HealthResponse(
+        status="healthy",
+        service=settings.app_name,
+        version=settings.app_version,
+        environment=settings.environment,
+    )   

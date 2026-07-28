@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from app.core.config import settings
 from app.core.logger import setup_logging
-from app.routers import health, root
+from app.routers import documentation, health, root
 
 setup_logging()
 
@@ -13,3 +13,4 @@ app = FastAPI(
 
 app.include_router(root.router)
 app.include_router(health.router)
+app.include_router(documentation.router)
