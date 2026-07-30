@@ -1,5 +1,3 @@
 from . import documentation
-
-__all__ = [
-    "documentation",
-]
+from . import health
+from . import root

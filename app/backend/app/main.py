@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 
+from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.logger import setup_logging
-from app.routers import documentation, health, root
+from app.routers.v1.api import api_router
 
 setup_logging()
 
@@ -11,6 +12,14 @@ app = FastAPI(
     version=settings.app_version,
 )
 
-app.include_router(root.router)
-app.include_router(health.router)
-app.include_router(documentation.router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://54.197.211.201:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(api_router)
