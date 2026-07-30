@@ -369,6 +369,323 @@ Configure `.gitignore` before making the first commit whenever possible.
 
 ---
 
+# Mistake 13: Committing Unresolved Merge Conflicts
+
+## What Happened?
+
+While working on Project Rock, unresolved Git merge conflict markers were accidentally committed into source files.
+
+Example:
+
+```python
+<<<<<<< HEAD
+service_name = "project-rock-api"
+=======
+>>>>>>> feature/backend
+```
+
+The application failed to start because these markers are not valid Python syntax.
+
+Error:
+
+```
+SyntaxError: invalid decimal literal
+```
+
+---
+
+## Root Cause
+
+A merge conflict was not resolved completely before committing.
+
+Git uses conflict markers to indicate sections that require manual resolution.
+
+These markers must never remain in the final code.
+
+---
+
+## How We Diagnosed It
+
+Running the backend produced:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Result:
+
+```
+SyntaxError
+```
+
+Opening the file revealed the conflict markers.
+
+---
+
+## Solution
+
+1. Remove the conflict markers.
+2. Keep the correct code.
+3. Run the application again.
+4. Search the repository for remaining conflict markers.
+
+```bash
+grep -R "<<<<<<<" . \
+  --exclude-dir=.git \
+  --exclude-dir=.venv \
+  --exclude-dir=node_modules
+
+grep -R ">>>>>>>" . \
+  --exclude-dir=.git \
+  --exclude-dir=.venv \
+  --exclude-dir=node_modules
+```
+
+Expected:
+
+```
+(no output)
+```
+
+---
+
+## Lesson Learned
+
+Always validate the repository before merging.
+
+Never assume all merge conflicts have been resolved.
+
+---
+
+# Mistake 14: Searching Generated Directories
+
+## What Happened?
+
+When searching for merge conflicts, the search returned results from:
+
+- node_modules
+- .venv
+- TypeScript internals
+
+Example:
+
+```
+node_modules/typescript/lib/typescript.js
+```
+
+These were not actual problems in our project.
+
+---
+
+## Root Cause
+
+The search included generated directories.
+
+---
+
+## Solution
+
+Exclude generated directories.
+
+```bash
+grep -R "<<<<<<<" . \
+  --exclude-dir=.git \
+  --exclude-dir=.venv \
+  --exclude-dir=node_modules
+```
+
+---
+
+## Lesson Learned
+
+Always limit repository searches to source code.
+
+---
+
+# Mistake 15: Building on a Broken Main Branch
+
+## What Happened?
+
+Development continued even though the main branch contained unresolved merge conflicts.
+
+This increased the risk of future merge problems.
+
+---
+
+## Why This Is Dangerous
+
+Every new feature inherits problems from the base branch.
+
+Fixing the foundation first prevents repeated issues.
+
+---
+
+## Correct Workflow
+
+```
+Fix main
+
+↓
+
+Verify
+
+↓
+
+Create feature branch
+
+↓
+
+Develop
+
+↓
+
+Merge back to main
+```
+
+---
+
+## Lesson Learned
+
+Never build new features on top of a broken main branch.
+
+---
+
+# Mistake 16: Confusing Merge and Rebase
+
+## What Happened?
+
+We considered rebasing while the current feature was still under active development.
+
+The correct decision was to first stabilize the current branch and only rebase immediately before merging.
+
+---
+
+## Correct Workflow
+
+```
+Create Feature Branch
+
+↓
+
+Develop
+
+↓
+
+Commit
+
+↓
+
+Push
+
+↓
+
+Update main
+
+↓
+
+Rebase Feature Branch
+
+↓
+
+Run Tests
+
+↓
+
+Merge
+```
+
+---
+
+## Lesson Learned
+
+Rebase is a synchronization step before merging, not something that should be done repeatedly during development.
+
+---
+
+# Mistake 17: Long-Lived Sprint Branches
+
+## What Happened?
+
+Initially, Sprint 2 work was performed on a long-lived sprint branch.
+
+As more work accumulated, synchronizing with main became increasingly difficult.
+
+---
+
+## Better Approach
+
+Create a new feature branch for every task.
+
+Example:
+
+```
+feature/devq-027-frontend-bootstrap
+
+feature/devq-028-react-router
+
+feature/devq-029-home-page
+```
+
+Each branch should:
+
+- Focus on one feature.
+- Be merged quickly.
+- Be deleted after merging.
+
+---
+
+## Lesson Learned
+
+Short-lived feature branches reduce merge conflicts and simplify code reviews.
+
+---
+
+# Mistake 18: Treating Git Commands as Magic
+
+## What Happened?
+
+Whenever Git reported an error, the instinct was to immediately run another command (`pull`, `fetch`, `rebase`, etc.) without first understanding the repository's state.
+
+---
+
+## Better Approach
+
+Before running any Git command, ask:
+
+1. What branch am I on?
+2. Is my branch ahead or behind?
+3. Has the remote changed?
+4. Am I trying to merge or synchronize?
+5. What does `git status` say?
+6. What does `git log --graph --decorate --all` show?
+
+Only then decide which command is appropriate.
+
+---
+
+## Lesson Learned
+
+Git problems are solved by understanding the repository state, not by memorizing commands.
+
+---
+
+# Git Principles Learned from Project Rock
+
+These principles summarize the most important lessons from our hands-on experience.
+
+1. Always check `git status` before making changes.
+2. Visualize branch history with `git log --graph --decorate --all`.
+3. Pull the latest `main` before creating a new feature branch.
+4. Keep feature branches short-lived.
+5. Make small, logical commits.
+6. Resolve merge conflicts immediately.
+7. Search for unresolved conflict markers before merging.
+8. Test the application before pushing.
+9. Never panic when Git reports an error—understand the repository state first.
+10. Git commands are tools; repository state determines which tool to use.
+
+---
+
 # Git Workflow Adopted for Project Rock
 
 ```text
