@@ -87,6 +87,358 @@ Instead of rebuilding the entire application, Vite reloads only the modified mod
 
 ---
 
+# Environment Variables in Vite
+
+Vite supports environment-specific configuration through environment variables.
+
+A common example is configuring the backend API URL:
+
+```text
+VITE_API_BASE_URL=http://<BACKEND_HOST>:8000/api/v1
+```
+
+The React application can access it using:
+
+```typescript
+import.meta.env.VITE_API_BASE_URL
+```
+
+Example with Axios:
+
+```typescript
+import axios from "axios";
+
+const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  timeout: 5000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export default apiClient;
+```
+
+This avoids hardcoding infrastructure-specific values inside application source code.
+
+---
+
+## Why the `VITE_` Prefix?
+
+Vite only exposes environment variables prefixed with:
+
+```text
+VITE_
+```
+
+to client-side application code.
+
+Correct:
+
+```text
+VITE_API_BASE_URL=http://localhost:8000/api/v1
+```
+
+Usage:
+
+```typescript
+import.meta.env.VITE_API_BASE_URL
+```
+
+A variable without the prefix:
+
+```text
+API_BASE_URL=http://localhost:8000/api/v1
+```
+
+is not exposed through `import.meta.env` by default.
+
+---
+
+## Important Security Rule
+
+Variables prefixed with `VITE_` are available to frontend code and can therefore be visible to users after the application is built.
+
+Never store secrets such as:
+
+```text
+VITE_DATABASE_PASSWORD
+VITE_AWS_SECRET_KEY
+VITE_JWT_SECRET
+VITE_PRIVATE_API_KEY
+```
+
+Frontend environment variables should contain values that are safe to expose, such as:
+
+```text
+VITE_API_BASE_URL
+```
+
+### Key Principle
+
+> A frontend `.env` file is configuration management, not secret management.
+
+If the browser needs a value, assume the user can eventually see that value.
+
+---
+
+# Vite `.env` Files
+
+During local development, Project Rock uses:
+
+```text
+app/frontend/.env
+```
+
+Example:
+
+```text
+VITE_API_BASE_URL=http://<BACKEND_HOST>:8000/api/v1
+```
+
+The real `.env` file should not be committed.
+
+Instead, commit:
+
+```text
+app/frontend/.env.example
+```
+
+Example:
+
+```text
+VITE_API_BASE_URL=http://<BACKEND_HOST>:8000/api/v1
+```
+
+This documents the configuration required by the frontend without storing environment-specific values in source control.
+
+---
+
+# Restart Vite After Configuration Changes
+
+Vite loads environment configuration when the development server starts.
+
+After changing `.env`, restart the development server:
+
+```bash
+npm run dev -- --host 0.0.0.0
+```
+
+Do not assume changing `.env` will always update an already-running Vite process.
+
+A useful debugging sequence is:
+
+```text
+Change .env
+    ↓
+Restart Vite
+    ↓
+Test application
+    ↓
+Check browser Network tab
+```
+
+---
+
+# Development vs Production Build
+
+A working Vite development server does not guarantee that the production build succeeds.
+
+During Project Rock development, the application worked through:
+
+```bash
+npm run dev
+```
+
+but:
+
+```bash
+npm run build
+```
+
+detected a stale TypeScript import.
+
+Therefore, before committing frontend work, run:
+
+```bash
+npm run build
+```
+
+The build performs TypeScript compilation and creates the production bundle.
+
+### Practical Rule
+
+```text
+npm run dev
+    ↓
+Useful during development
+
+npm run build
+    ↓
+Required before considering the change complete
+```
+
+Both checks serve different purposes.
+
+---
+
+# Environment Configuration Flow in Project Rock
+
+The current frontend flow is:
+
+```text
+.env
+ │
+ │ VITE_API_BASE_URL
+ ▼
+import.meta.env
+ │
+ ▼
+apiClient.ts
+ │
+ ▼
+Axios
+ │
+ ▼
+FastAPI API
+```
+
+The React components do not need to know the backend host.
+
+For example:
+
+```typescript
+apiClient.get("/documentation/categories");
+```
+
+The service only knows the API path.
+
+The shared Axios client knows where the backend is located:
+
+```typescript
+baseURL: import.meta.env.VITE_API_BASE_URL
+```
+
+This provides separation between:
+
+```text
+Feature Logic
+     ↓
+API Client
+     ↓
+Environment Configuration
+```
+
+---
+
+# Common Mistakes
+
+## Hardcoding the backend URL
+
+Avoid:
+
+```typescript
+baseURL: "http://100.29.248.133:8000/api/v1"
+```
+
+Prefer:
+
+```typescript
+baseURL: import.meta.env.VITE_API_BASE_URL
+```
+
+---
+
+## Forgetting the `VITE_` prefix
+
+Incorrect:
+
+```text
+API_BASE_URL=http://localhost:8000
+```
+
+Correct:
+
+```text
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+---
+
+## Putting secrets in `VITE_*`
+
+Never assume frontend environment variables are private.
+
+```text
+VITE_* = client-visible configuration
+```
+
+---
+
+## Committing `.env`
+
+Keep the actual environment file ignored:
+
+```gitignore
+.env
+.env.*
+!.env.example
+```
+
+Commit `.env.example` instead.
+
+---
+
+## Forgetting to restart Vite
+
+When environment configuration changes:
+
+```text
+Update .env
+    ↓
+Restart Vite
+    ↓
+Verify
+```
+
+---
+
+# Interview Quick Revision
+
+### How does Vite expose environment variables?
+
+Vite exposes client-side environment variables through:
+
+```typescript
+import.meta.env
+```
+
+Custom variables intended for frontend code must normally use the `VITE_` prefix.
+
+### Can secrets be stored in `VITE_*` variables?
+
+No. These variables become part of client-side code and should be treated as publicly visible configuration.
+
+### Why use an environment variable for the API URL?
+
+Because the backend address can differ between development, staging, and production while the frontend source code remains unchanged.
+
+### Why use a shared Axios client?
+
+It centralizes configuration such as the API base URL, timeout, and headers instead of duplicating them across feature services.
+
+### Does `npm run dev` passing mean the application is production-ready?
+
+No. The production build should also be validated with:
+
+```bash
+npm run build
+```
+
+This can detect TypeScript, import, and build-time problems that may not have been noticed during development.
+
+---
+
 ### Production Mode
 
 When you run:

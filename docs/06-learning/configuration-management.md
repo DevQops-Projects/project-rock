@@ -1,4 +1,4 @@
-# Configuration Management in Python
+# Application Configuration Management
 
 ## Overview
 
@@ -235,6 +235,225 @@ For production deployments, use secure secret management solutions such as:
 - AWS Secrets Manager
 - AWS Systems Manager Parameter Store
 - Kubernetes Secrets
+
+---
+
+# Practical Configuration Pattern Used in Project Rock
+
+Project Rock has both a frontend and backend application. Each application has environment-specific configuration that should not be hardcoded into source code.
+
+## Before
+
+The EC2 public IP was directly embedded in application code.
+
+Frontend:
+
+```typescript
+baseURL: "http://100.29.248.133:8000/api/v1"
+```
+
+Backend:
+
+```python
+allow_origins=[
+    "http://100.29.248.133:5173",
+]
+```
+
+This creates a deployment problem.
+
+If the server IP, domain, port, or environment changes, source code must also be changed.
+
+---
+
+## After
+
+Environment-specific values are stored outside application code.
+
+### Frontend
+
+```text
+VITE_API_BASE_URL=http://<BACKEND_HOST>:8000/api/v1
+```
+
+The application reads it using:
+
+```typescript
+import.meta.env.VITE_API_BASE_URL
+```
+
+### Backend
+
+```text
+FRONTEND_URL=http://<FRONTEND_HOST>:5173
+```
+
+Pydantic Settings loads the value:
+
+```python
+settings.frontend_url
+```
+
+The CORS configuration can then use:
+
+```python
+allow_origins=[
+    settings.frontend_url,
+]
+```
+
+The resulting configuration flow is:
+
+```text
+Frontend
+
+.env
+  ↓
+VITE_API_BASE_URL
+  ↓
+import.meta.env
+  ↓
+Axios API Client
+
+
+Backend
+
+.env
+  ↓
+FRONTEND_URL
+  ↓
+Pydantic Settings
+  ↓
+FastAPI CORS Configuration
+```
+
+---
+
+# Configuration vs Code
+
+A useful rule is:
+
+> If a value changes between environments but application behavior does not, it probably belongs in configuration.
+
+Examples:
+
+| Value | Configuration? |
+|---|---|
+| Backend URL | Yes |
+| Frontend URL | Yes |
+| Database hostname | Yes |
+| Port | Yes |
+| Log level | Yes |
+| API credentials | Yes |
+| Business logic | No |
+| Request validation logic | No |
+
+The goal is:
+
+```text
+Same Code
+   │
+   ├── Development Configuration
+   ├── Testing Configuration
+   ├── Staging Configuration
+   └── Production Configuration
+```
+
+not:
+
+```text
+Development Code
+Staging Code
+Production Code
+```
+
+---
+
+# `.env` vs `.env.example`
+
+These files serve different purposes.
+
+### `.env`
+
+Contains configuration for the actual environment.
+
+```text
+VITE_API_BASE_URL=http://actual-host:8000/api/v1
+```
+
+It should normally be ignored by Git.
+
+### `.env.example`
+
+Documents the configuration variables required to run the application.
+
+```text
+VITE_API_BASE_URL=http://<BACKEND_HOST>:8000/api/v1
+```
+
+It should be committed to Git.
+
+A useful way to remember this:
+
+```text
+.env          = actual configuration
+.env.example  = configuration contract
+```
+
+---
+
+# Important Git Ignore Pattern
+
+A useful pattern is:
+
+```gitignore
+.env
+.env.*
+!.env.example
+```
+
+Meaning:
+
+```text
+.env              → ignored
+.env.local        → ignored
+.env.production   → ignored
+.env.example      → tracked
+```
+
+The exception rule:
+
+```gitignore
+!.env.example
+```
+
+is important because `.env.*` would otherwise also ignore `.env.example`.
+
+---
+
+# Practical Lesson
+
+During development, changing an EC2 public IP required modifying both frontend and backend source code.
+
+Moving these values into environment configuration means infrastructure changes no longer require application source-code changes.
+
+Using an Elastic IP also reduces unnecessary IP changes, but the application should still avoid depending on that IP directly in source code.
+
+This becomes even more important later when moving from:
+
+```text
+EC2 IP
+   ↓
+Domain Name
+   ↓
+Load Balancer
+   ↓
+Containers
+   ↓
+Kubernetes
+```
+
+The infrastructure can evolve while the application continues reading configuration through the same interface.
 
 ---
 

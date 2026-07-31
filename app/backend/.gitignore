@@ -9,6 +9,8 @@ venv/
 
 # Environment Variables
 .env
+.env.*
+!.env.example
 
 # Test
 .pytest_cache/
