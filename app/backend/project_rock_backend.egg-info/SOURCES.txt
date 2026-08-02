@@ -9,13 +9,13 @@ app/core/exceptions.py
 app/core/logger.py
 app/models/__init__.py
 app/models/sample_data.py
-app/routers/__init__.py
-app/routers/health.py
-app/routers/root.py
+app/repositories/__init__.py
 app/routers/v1/__init__.py
-app/routers/v1/docs.py
+app/routers/v1/api.py
+app/routers/v1/documentation.py
+app/routers/v1/health.py
+app/routers/v1/root.py
 app/schemas/__init__.py
-app/schemas/docs.py
 app/schemas/documentation.py
 app/schemas/health.py
 app/schemas/system.py
@@ -26,6 +26,6 @@ project_rock_backend.egg-info/SOURCES.txt
 project_rock_backend.egg-info/dependency_links.txt
 project_rock_backend.egg-info/requires.txt
 project_rock_backend.egg-info/top_level.txt
-tests/test_docs.py
+tests/test_documentation.py
 tests/test_health.py
 tests/test_root.py
