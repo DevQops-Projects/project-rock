@@ -18,7 +18,7 @@ export default function Navbar() {
         <Link to="/" style={{ color: "white", textDecoration: "none" }}>
           Home
         </Link>
-
+        <Link to="/health">❤️ Health</Link>
         <Link
           to="/documentation"
           style={{ color: "white", textDecoration: "none" }}
