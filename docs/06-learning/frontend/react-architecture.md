@@ -258,6 +258,33 @@ Every React application starts from `main.tsx`.
 
 ---
 
+# Feature Service Layer
+
+As Project Rock grows, each frontend feature owns its own service layer.
+
+Example:
+
+```text
+features/
+└── health/
+    ├── pages/
+    ├── services/
+    │   └── healthService.ts
+    └── types/
+```
+
+Responsibilities:
+
+- **Pages** are responsible for rendering the UI and handling user interactions.
+- **Services** communicate with backend APIs.
+- **Types** define the data contract between the frontend and backend.
+
+This separation keeps presentation logic independent from API communication and allows each feature to evolve independently.
+
+The same structure is currently followed by both the **Documentation** and **Health** features and will be used for future features such as Projects, Users, and Authentication.
+
+---
+
 ## Project Rock Example
 
 Our application currently follows this flow:

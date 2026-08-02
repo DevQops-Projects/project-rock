@@ -16,7 +16,9 @@ export default function Sidebar() {
         <li>
           <Link to="/">🏠 Home</Link>
         </li>
-
+        <li> 
+	  <Link to="/health">❤️ Health</Link>
+	</li>  
         <li>
           <Link to="/documentation">📚 Documentation</Link>
         </li>
