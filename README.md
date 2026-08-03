@@ -60,20 +60,13 @@ The focus is on engineering excellence rather than technology accumulation.
 
 | Category | Technology |
 |----------|------------|
-| Frontend | Next.js |
+| Frontend | React + Vite + TypeScript |
 | Backend | FastAPI |
-| Database | PostgreSQL |
-| Infrastructure | Terraform |
-| Configuration | Ansible |
-| Containers | Docker |
-| Orchestration | Kubernetes |
-| Cloud | AWS |
-| CI | GitHub Actions |
-| CD | Jenkins |
-| Monitoring | Prometheus |
-| Visualization | Grafana |
-| Logging | Loki |
-| AI | Gemini API |
+| Database | PostgreSQL 17 |
+| ORM | SQLAlchemy 2.x *(integration in progress)* |
+| Database Driver | Psycopg 3 |
+| Database Migrations | Alembic *(setup in progress)* |
+| Containers | Docker & Docker Compose |
 
 ---
 
