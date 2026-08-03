@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:17
+
+    container_name: project-rock-postgres
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: projectrock
+      POSTGRES_USER: projectrock
+      POSTGRES_PASSWORD: projectrock
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - project-rock-postgres-data:/var/lib/postgresql/data
+
+    networks:
+      - project-rock-network
+
+volumes:
+  project-rock-postgres-data:
+    name: project-rock-postgres-data
+
+networks:
+  project-rock-network:
+    name: project-rock-network

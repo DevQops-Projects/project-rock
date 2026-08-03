@@ -104,33 +104,13 @@ Additional platform capabilities will be introduced incrementally as the project
 
 | Category | Technology |
 |----------|------------|
-| Frontend | React |
-| Language | TypeScript |
-| Frontend Tooling | Vite |
-| HTTP Client | Axios |
+| Frontend | React + Vite + TypeScript |
 | Backend | FastAPI |
-| Backend Language | Python |
-| Configuration | Pydantic Settings / Environment Variables |
-| Cloud | AWS EC2 |
-| Infrastructure as Code | Terraform |
-| Version Control | Git / GitHub |
-
-## Planned / Future Platform
-
-| Category | Technology |
-|----------|------------|
-| Database | PostgreSQL |
-| Configuration Management | Ansible |
-| Containers | Docker |
-| Orchestration | Kubernetes |
-| CI/CD | GitHub Actions / Jenkins |
-| Monitoring | Prometheus |
-| Visualization | Grafana |
-| Logging | Loki |
-| AI | AI API integration |
-| Cloud Platform | AWS |
-
-Technologies are introduced only when the project reaches an engineering problem that justifies their use.
+| Database | PostgreSQL 17 |
+| ORM | SQLAlchemy 2.x *(integration in progress)* |
+| Database Driver | Psycopg 3 |
+| Database Migrations | Alembic *(setup in progress)* |
+| Containers | Docker & Docker Compose |
 
 ---
 
@@ -596,4 +576,4 @@ The engineering journey—including decisions, mistakes, debugging, automation, 
 
 ## ⭐ DevQops
 
-Built under the **DevQops** engineering organization.
+Built with ❤️ under the **DevQops** engineering organization.

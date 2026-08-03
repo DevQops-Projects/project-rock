@@ -565,6 +565,33 @@ Move to feature branches.
 
 ---
 
+# Keeping Local and Remote Branches in Sync
+
+When collaborating through GitHub, local branches can become outdated if new commits are pushed to the remote repository.
+
+A common workflow before merging into `main` is:
+
+```bash
+git checkout main
+git pull --rebase origin main
+git merge develop
+git push origin main
+```
+
+If Git rejects a push with:
+
+```text
+Updates were rejected because the remote contains work that you do not have locally.
+```
+
+it means the local branch is behind the remote branch.
+
+Running `git pull --rebase origin main` integrates the remote changes before pushing.
+
+Using `--rebase` helps maintain a cleaner, linear commit history by replaying local commits on top of the latest remote commits.
+
+---
+
 # 15. How Senior Engineers Think
 
 Beginner:

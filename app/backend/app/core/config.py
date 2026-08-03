@@ -9,6 +9,21 @@ class Settings(BaseSettings):
 
     host: str = "0.0.0.0"
     port: int = 8000
+    
+    database_host: str = "localhost"
+    database_port: int = 5432
+    database_name: str = "projectrock"
+    database_user: str = "projectrock"
+    database_password: str = "projectrock"
+
+    @property
+    def database_url(self) -> str:
+        return (
+            f"postgresql+psycopg://"
+            f"{self.database_user}:{self.database_password}"
+            f"@{self.database_host}:{self.database_port}"
+            f"/{self.database_name}"
+        )
 
     log_level: str = "INFO"
 
