@@ -1,62 +1,106 @@
 # 🚀 Project Rock
 
-> **An AI-assisted, production-inspired DevOps Learning Platform built to demonstrate modern Cloud, DevOps, Platform Engineering, and AI-assisted software engineering practices.**
+> **A production-inspired DevOps learning platform built to demonstrate modern software engineering, Cloud, DevOps, Platform Engineering, and AI-assisted engineering practices.**
 
 ---
 
-## 📖 About
+## 📖 About Project Rock
 
-Project Rock is an open-source engineering project developed under the **DevQops** organization.
+Project Rock is an open-source engineering and learning project developed under the **DevQops** organization.
 
-The primary goal of Project Rock is **not simply to build another web application**, but to build a realistic engineering platform that demonstrates how modern cloud-native applications are designed, deployed, automated, monitored, and continuously improved using production-inspired DevOps practices.
+The goal is not simply to build another web application.
 
-The application itself serves as a realistic workload for implementing Infrastructure as Code, CI/CD pipelines, containerization, cloud infrastructure, Kubernetes, observability, security, and AI-assisted learning.
+Project Rock is being developed as a realistic application workload through which modern engineering practices can be learned, implemented, tested, documented, and improved.
+
+The project is designed to progressively explore:
+
+- Software Engineering
+- Cloud Engineering
+- DevOps
+- Infrastructure as Code
+- CI/CD
+- Containers
+- Kubernetes
+- Observability
+- Security
+- Platform Engineering
+- AI-assisted engineering
+
+Rather than learning these technologies independently, Project Rock introduces them as solutions to real engineering problems encountered while building and operating the platform.
 
 ---
 
 # 🎯 Vision
 
-Learning DevOps is often fragmented across official documentation, blogs, videos, and community forums.
+DevOps learning is often fragmented across tutorials, documentation, videos, labs, and isolated projects.
 
-Project Rock aims to solve this by becoming an AI-assisted DevOps learning platform that:
+Project Rock aims to combine learning with practical engineering.
 
-- Organizes trusted learning resources
-- Simplifies complex DevOps concepts
-- Promotes learning through real engineering
-- Demonstrates production-inspired architecture
-- Encourages Infrastructure as Code and automation-first practices
+The platform is being built around the idea:
 
-Official documentation always remains the primary source of technical truth.
+> **Learn the technology by understanding the problem it solves and implementing it in a real system.**
+
+Official documentation remains the primary source of technical truth, while Project Rock focuses on practical implementation, engineering decisions, troubleshooting, and lessons learned.
 
 ---
 
-# ✨ Current Features
+# 🏗️ Current Application
 
-- 📚 Structured DevOps learning platform
-- 🤖 AI-assisted DevOps mentor *(planned)*
-- ☁️ Infrastructure as Code
-- 🐳 Docker-based development
-- ⚙️ CI/CD pipelines
-- 📦 Kubernetes deployments
-- 📈 Monitoring & Observability
-- 🔒 Security-first engineering
-- 📖 Comprehensive project documentation
+Project Rock currently consists of a React frontend and FastAPI backend.
+
+```text
+User
+ │
+ ▼
+React + TypeScript
+ │
+ │ HTTP / REST
+ ▼
+FastAPI
+ │
+ ├── API Routing
+ ├── Services
+ ├── Schemas
+ ├── Configuration
+ └── Logging
+ │
+ ▼
+Future Persistence Layer
+```
+
+The application is currently running on AWS EC2 while the surrounding infrastructure and deployment platform are developed incrementally.
 
 ---
 
-# 🏗️ Engineering Philosophy
+# ✨ Current Capabilities
 
-Project Rock follows one simple principle:
+The project currently includes:
 
-> **Every technology must solve a real engineering problem.**
+- React + TypeScript frontend
+- Vite frontend build tooling
+- FastAPI backend
+- Versioned REST API (`/api/v1`)
+- Feature-based frontend architecture
+- Layered backend architecture
+- Frontend-to-backend API integration
+- Centralized Axios API client
+- Environment-based application configuration
+- CORS configuration
+- Backend health endpoint
+- Documentation categories API
+- AWS EC2 development environment
+- Elastic IP configuration
+- Git feature-branch workflow
+- Structured engineering and learning documentation
+- Terraform foundation and workflow documentation
 
-Technologies are introduced only when they provide meaningful learning opportunities or improve the platform.
-
-The focus is on engineering excellence rather than technology accumulation.
+Additional platform capabilities will be introduced incrementally as the project evolves.
 
 ---
 
-# 🛠 Technology Stack
+# 🛠️ Technology Stack
+
+## Currently Implemented
 
 | Category | Technology |
 |----------|------------|
@@ -70,27 +114,112 @@ The focus is on engineering excellence rather than technology accumulation.
 
 ---
 
-# 🏛 Architecture
+# 🏛️ Architecture
 
-Project Rock follows an **Engineering-First Modular Monolith Architecture**, designed to evolve naturally into microservices when justified by business requirements.
+Project Rock follows a **modular application architecture** designed to remain understandable while allowing the system to evolve as requirements grow.
+
+## Frontend
+
+The frontend follows a feature-oriented structure:
 
 ```text
-Users
-   │
-   ▼
-Next.js Frontend
-   │
-   ▼
-FastAPI Backend
-   │
-   ├── Authentication
-   ├── Learning
-   ├── AI
-   └── Community
-   │
-   ▼
-PostgreSQL
+frontend/src/
+│
+├── api/
+├── components/
+├── features/
+│   ├── documentation/
+│   ├── health/
+│   └── home/
+├── hooks/
+├── layouts/
+├── routes/
+├── styles/
+└── utils/
 ```
+
+Feature-specific code is kept close to the feature that owns it.
+
+Example:
+
+```text
+features/documentation/
+├── components/
+├── pages/
+├── services/
+└── types/
+```
+
+## Backend
+
+The FastAPI backend separates API routing, business logic, schemas, configuration, and data access responsibilities.
+
+```text
+backend/app/
+│
+├── core/
+├── models/
+├── repositories/
+├── routers/
+│   └── v1/
+├── schemas/
+├── services/
+└── main.py
+```
+
+Public APIs are versioned under:
+
+```text
+/api/v1
+```
+
+Example:
+
+```text
+GET /api/v1/health
+GET /api/v1/documentation/categories
+```
+
+---
+
+# ⚙️ Configuration Management
+
+Environment-specific values are kept outside application source code.
+
+Frontend:
+
+```text
+VITE_API_BASE_URL
+```
+
+Backend:
+
+```text
+FRONTEND_URL
+```
+
+The configuration flow follows:
+
+```text
+Environment
+     │
+     ▼
+Configuration
+     │
+     ▼
+Application
+```
+
+rather than:
+
+```text
+Infrastructure values
+     │
+     ▼
+Hardcoded source code
+```
+
+Real `.env` files are excluded from Git while `.env.example` files document the required configuration.
 
 ---
 
@@ -100,6 +229,9 @@ PostgreSQL
 project-rock/
 │
 ├── app/
+│   ├── backend/
+│   └── frontend/
+│
 ├── infrastructure/
 ├── platform/
 ├── cicd/
@@ -109,82 +241,336 @@ project-rock/
 └── scripts/
 ```
 
----
-
-# 🗺 Project Roadmap
-
-- ✅ Sprint 0 – Engineering Foundation
-- ✅ Sprint 1 – Solution Architecture
-- 🔄 Sprint 2 – AWS Foundation
-- ⏳ Sprint 3 – Terraform Foundation
-- ⏳ Sprint 4 – Networking
-- ⏳ Sprint 5 – Application Foundation
-- ⏳ Sprint 6 – Docker
-- ⏳ Sprint 7 – CI/CD
-- ⏳ Sprint 8 – Kubernetes
-- ⏳ Sprint 9 – Observability
-- ⏳ Sprint 10 – AI Platform
+The repository is intentionally structured to grow with the engineering lifecycle of the platform.
 
 ---
 
-# 📚 Documentation
+# 📚 Learning Documentation
 
-| Document | Purpose |
-|----------|---------|
-| Product Vision | Product goals |
-| System Architecture | High-level architecture |
-| Engineering Principles | Engineering standards |
-| Technology Decisions | Architecture decisions |
-| Security Handbook | Security practices |
-| Deployment Strategy | Deployment lifecycle |
-| Runbooks | Operational procedures |
+One of the core goals of Project Rock is to document not only **what was built**, but also **what was learned while building it**.
+
+Learning documentation is maintained under:
+
+```text
+docs/06-learning/
+```
+
+Current areas include:
+
+```text
+06-learning/
+├── aws/
+├── frontend/
+├── git/
+├── python/
+├── sprint-retrospectives/
+└── terraform/
+```
+
+The notes focus on:
+
+- Core concepts
+- Practical implementation
+- Common mistakes
+- Debugging experiences
+- Engineering decisions
+- Production considerations
+- Interview revision
+
+This creates a reusable engineering knowledge base alongside the application itself.
 
 ---
 
-# 🚀 Getting Started
+# 🧠 Engineering Philosophy
 
-Documentation for local setup and deployment will be added as the platform evolves.
+Project Rock follows several guiding principles.
 
-Future setup will include:
+### Every technology should solve a problem
 
-- Docker Compose
-- Terraform
-- AWS
-- Ansible
+Technology is not introduced simply because it is popular.
+
+Before introducing a tool, the project should answer:
+
+> What engineering problem does this solve?
+
+---
+
+### Build incrementally
+
+Large architectural changes are broken into small, testable improvements.
+
+```text
+Implement
+   ↓
+Test
+   ↓
+Debug
+   ↓
+Document
+   ↓
+Commit
+```
+
+---
+
+### Configuration belongs outside code
+
+Environment-specific configuration should not require source-code changes.
+
+---
+
+### Validate before considering work complete
+
+Frontend development includes both:
+
+```bash
+npm run dev
+```
+
+and production build validation:
+
+```bash
+npm run build
+```
+
+Backend changes are verified through application testing and automated tests.
+
+---
+
+### Documentation is part of engineering
+
+Architecture decisions, mistakes, troubleshooting, and lessons learned are treated as part of the project—not as an afterthought.
+
+---
+
+# 🔄 Development Workflow
+
+Project Rock uses feature branches for incremental development.
+
+```text
+main
+ │
+ └── feature/devq-xxx
+          │
+          ├── Implement
+          ├── Test
+          ├── Document
+          └── Pull Request
+                 │
+                 ▼
+               main
+```
+
+Typical workflow:
+
+```bash
+git checkout main
+git pull origin main
+
+git checkout -b feature/devq-xxx
+```
+
+After implementation and verification:
+
+```bash
+git add .
+git commit -m "<type>(<scope>): <description>"
+git push -u origin feature/devq-xxx
+```
+
+Changes are reviewed through a Pull Request before being merged.
+
+---
+
+# ☁️ Cloud Environment
+
+Project Rock currently uses AWS EC2 as its development cloud environment.
+
+The application currently runs as:
+
+```text
+Internet
+   │
+   ▼
+AWS Security Group
+   │
+   ▼
+EC2
+   │
+   ├── React / Vite :5173
+   │
+   └── FastAPI      :8000
+```
+
+An Elastic IP provides a stable public address for the current EC2 environment.
+
+This is an intermediate architecture.
+
+As the project evolves, direct application exposure through development ports will be replaced by more production-appropriate networking and deployment patterns.
+
+---
+
+# 🗺️ Engineering Roadmap
+
+Project Rock is being developed incrementally.
+
+### Foundation
+
+- ✅ Repository and engineering foundation
+- ✅ Initial AWS environment
+- ✅ Terraform foundation
+- ✅ Backend foundation
+- ✅ Frontend foundation
+- ✅ React routing
+- ✅ Versioned FastAPI routing
+- ✅ Frontend/backend API integration
+- ✅ Environment configuration
+- 🔄 Frontend resilience and user states
+
+### Upcoming Evolution
+
+Planned areas include:
+
+- Database integration
+- Authentication and authorization
+- Docker
+- CI pipelines
+- Automated testing improvements
+- Deployment automation
+- AWS infrastructure evolution
 - Kubernetes
+- Monitoring and observability
+- Centralized logging
+- Security improvements
+- AI-assisted learning capabilities
+- Platform engineering capabilities
+
+The roadmap evolves as new engineering requirements emerge.
+
+---
+
+# 🚀 Running the Application
+
+## Backend
+
+```bash
+cd app/backend
+
+source .venv/bin/activate
+
+uvicorn app.main:app \
+  --reload \
+  --host 0.0.0.0 \
+  --port 8000
+```
+
+Backend API documentation is available through FastAPI Swagger UI at:
+
+```text
+http://<BACKEND_HOST>:8000/docs
+```
+
+---
+
+## Frontend
+
+```bash
+cd app/frontend
+
+npm install
+
+npm run dev -- --host 0.0.0.0
+```
+
+Before considering frontend changes complete:
+
+```bash
+npm run build
+```
+
+---
+
+# 🔐 Environment Configuration
+
+Create local environment files from the provided examples.
+
+Frontend:
+
+```bash
+cd app/frontend
+cp .env.example .env
+```
+
+Backend:
+
+```bash
+cd app/backend
+cp .env.example .env
+```
+
+Update the values according to your environment.
+
+Never commit real `.env` files.
 
 ---
 
 # 🤝 Contributing
 
-Project Rock follows professional Git workflows.
+Project Rock follows an engineering-focused contribution workflow.
 
-- Feature branches
-- Pull Requests
-- Code Reviews
-- Documentation-first development
+Contributions should:
 
-Detailed contribution guidelines will be provided in `CONTRIBUTING.md`.
+- Use feature branches
+- Keep changes focused
+- Include appropriate testing
+- Update relevant documentation
+- Avoid committing secrets or environment-specific configuration
+- Use Pull Requests for review
+
+Detailed contribution guidelines can evolve in `CONTRIBUTING.md`.
 
 ---
 
 # 📈 Current Status
 
-**Current Sprint**
+Project Rock is currently in **active development**.
 
-Sprint 2 – AWS Foundation
+The application foundation is operational:
 
-**Project Phase**
+```text
+React Frontend
+      │
+      ▼
+Versioned REST API
+      │
+      ▼
+FastAPI Backend
+      │
+      ▼
+AWS EC2 Environment
+```
 
-Platform Engineering Foundation
+The next stages focus on making the application and its delivery platform progressively more production-ready.
 
 ---
 
-# 🎯 Project Goal
+# 🎯 Long-Term Goal
 
-Project Rock is being built as a long-term engineering platform to demonstrate modern DevOps, Cloud, Platform Engineering, Security, Observability, and AI-assisted engineering practices.
+Project Rock is intended to become both:
 
-It serves both as a learning platform and as a portfolio project showcasing production-inspired software engineering.
+**A learning platform**
+
+for understanding DevOps, Cloud, Platform Engineering, and modern software engineering through practical implementation.
+
+and
+
+**An engineering portfolio**
+
+demonstrating how a system evolves from a simple application into a production-inspired cloud-native platform.
+
+The value of the project is not only the final architecture.
+
+The engineering journey—including decisions, mistakes, debugging, automation, documentation, and evolution—is part of the product.
 
 ---
 
