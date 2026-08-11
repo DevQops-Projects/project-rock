@@ -1,14 +1,27 @@
-from app.models.sample_data import DOCUMENTATION_CATEGORIES
+from sqlalchemy.orm import Session
+
+from app.repositories.documentation_repository import (
+    get_documentation_categories,
+)
 from app.schemas.documentation import DocumentationCategory
 
 
 class DocumentationService:
     """Business logic for documentation."""
 
-    def get_categories(self) -> list[DocumentationCategory]:
+    def get_categories(
+        self,
+        db: Session,
+    ) -> list[DocumentationCategory]:
+        categories = get_documentation_categories(db)
+
         return [
-            DocumentationCategory(**category)
-            for category in DOCUMENTATION_CATEGORIES
+            DocumentationCategory(
+                id=category.id,
+                name=category.name,
+                description=category.description,
+            )
+            for category in categories
         ]
 
 
